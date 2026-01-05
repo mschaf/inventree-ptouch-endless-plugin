@@ -1,0 +1,62 @@
+{% load l10n %}
+{% load report %}
+{% load barcode %}
+{% load inventree_extras %}
+{% load ptouch %}
+
+{% define width|mm_to_ptouch_width_px as width_px %}
+{% define height|mm_to_ptouch_height_px as height_px %}
+
+<head>
+    <style>
+
+        @page {
+          margin: 0mm;
+          size: {{ width_px }}px {{ height_px }}px;
+        }
+
+        body {
+            margin: 0mm;
+            color: #000;
+            background-color: #FFF;
+            page-break-before: always;
+            page-break-after: always;
+            width: {{ width_px }}px;
+            height: {{ height_px }}px;
+            font-family: "Roboto";
+            font-size: 32px;
+            font-smooth: never;
+            text-rendering: geometricPrecision;
+        }
+
+        img {
+            display: inline-block;
+            image-rendering: pixelated;
+        }
+
+        .content {
+            {% localize off %}
+            background-color: #FFF;
+            width: {{ width_px }}px;
+            height: {{ height_px }}px;
+            {% endlocalize %}
+            break-after: always;
+            position: absolute;
+            left: 0mm;
+            top: 0mm;
+        }
+
+        {% block style %}
+        /* User-defined styles can go here, and override any styles defined above */
+        {% endblock style %}
+
+    </style>
+</head>
+
+<body>
+    <div class='content'>
+        {% block content %}
+        /* User-defined styles can go here, and override any styles defined above */
+        {% endblock content %}
+    </div>
+</body>
