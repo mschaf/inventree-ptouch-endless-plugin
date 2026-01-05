@@ -26,12 +26,6 @@ ALL_MODELS = {
     "E550W": E550W,
 }
 
-def _printer_class_from_model_string(printer_class):
-    if printer_class not in ALL_MODELS:
-        raise ValueError(f"Printer class {printer_class} not supported")
-
-    return ALL_MODELS[printer_class]
-
 class PTouchEndlessPlugin(AppMixin, MachineDriverMixin, InvenTreePlugin):
     """Inventree plugin supporting specifically Brother PTouch Series printers."""
 
@@ -104,7 +98,7 @@ class PTouchEndlessDriver(LabelPrinterBaseDriver):
         page = Page.from_image(monochrome_image)
         # page.image.save('/tmp/label.png')
 
-        job = Job(Media.W12, half_cut=True)
+        job = Job(_media_from_height(monochrome_image.size[1]), half_cut=True)
         job.add_page(page)
 
         backend = TCPBackend(machine.get_setting("IP_ADDRESS", "D"))
@@ -142,3 +136,29 @@ def _trim_right_whitespace(img: Image.Image) -> Image.Image:
 
     # Crop to include last_col
     return img.crop((0, 0, last_col + 1, h))
+
+
+def _media_from_height(value):
+    value = int(value)
+
+    if value ==  Media.W3_5.value.printarea:
+        return Media.W3_5
+    if value == Media.W6.value.printarea:
+        return Media.W6
+    if value == Media.W9.value.printarea:
+        return Media.W9
+    if value == Media.W12.value.printarea:
+        return Media.W12
+    if value == Media.W18.value.printarea:
+        return Media.W18
+    if value == Media.W24.value.printarea:
+        return Media.W24
+
+    raise BaseException(f"Could not determine media type from height ({value})")
+
+
+def _printer_class_from_model_string(printer_class):
+    if printer_class not in ALL_MODELS:
+        raise ValueError(f"Printer class {printer_class} not supported")
+
+    return ALL_MODELS[printer_class]
