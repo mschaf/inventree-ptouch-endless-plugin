@@ -21,6 +21,7 @@ setuptools.setup(
     url="https://github.com/mschaf/inventree-ptouch-endless-plugin",
     license="Apache License Version 2.0",
     packages=setuptools.find_packages(),
+    include_package_data=True,
     install_requires=[
         "pillow",
     ],

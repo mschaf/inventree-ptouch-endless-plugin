@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+recursive-include inventree_ptouch_endless/templates *
+recursive-include inventree_ptouch_endless/templatetags *
+recursive-include inventree_ptouch_endless/labelprinterkit *
+
